@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SEASONALITY-SEAG — S&P 500 & NASDAQ</title>
+<title>SEASONALITY-SEAG — S&P 500 & NASDAQ 100</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
 <style>
@@ -473,7 +473,7 @@
 <header class="dashboard-header">
   <div class="header-left">
     <div class="header-tag">SEASONALITY-SEAG&lt;GO&gt;</div>
-    <div class="header-sub">S&amp;P 500 &amp; NASDAQ Composite &middot; Monthly % Returns</div>
+    <div class="header-sub">S&amp;P 500 &amp; NASDAQ 100 &middot; Monthly % Returns</div>
   </div>
   <div class="header-right">
     <div class="meta">
@@ -487,7 +487,7 @@
 <!-- ═══ Controls ════════════════════════════════════ -->
 <nav class="controls">
   <button class="tab-btn active" data-tab="spx">S&amp;P 500</button>
-  <button class="tab-btn" data-tab="ndx">NASDAQ</button>
+  <button class="tab-btn" data-tab="ndx">NASDAQ 100</button>
   <button class="tab-btn" data-tab="both">Side by Side</button>
   <div class="sep"></div>
   <button class="tab-btn" data-tab="diff">Spread (NDX &minus; SPX)</button>
@@ -639,11 +639,11 @@ function buildChart(container, spxData, ndxData, startYear, curYear, curMonth) {
   container.innerHTML = `
     <div class="chart-card">
       <div class="chart-title">Cumulative Growth Comparison</div>
-      <div class="chart-subtitle">$100 invested Jan ${startYear} — S&P 500 vs NASDAQ Composite (monthly compounding)</div>
+      <div class="chart-subtitle">$100 invested Jan ${startYear} — S&P 500 vs NASDAQ 100 (monthly compounding)</div>
       <div class="chart-canvas-wrap"><canvas id="cumulativeChart"></canvas></div>
       <div class="chart-legend">
         <span><span class="dot" style="background:#059669"></span>S&P 500</span>
-        <span><span class="dot" style="background:#58A6FF"></span>NASDAQ</span>
+        <span><span class="dot" style="background:#58A6FF"></span>NASDAQ 100</span>
       </div>
     </div>
   `;
@@ -685,7 +685,7 @@ function buildChart(container, spxData, ndxData, startYear, curYear, curMonth) {
           tension: 0.3,
         },
         {
-          label: 'NASDAQ',
+          label: 'NASDAQ 100',
           data: ndxSeries.values,
           borderColor: '#58A6FF',
           backgroundColor: blueGrad,
@@ -823,7 +823,7 @@ async function main() {
       });
 
     const spxData = data["S&P 500"];
-    const ndxData = data["NASDAQ"];
+    const ndxData = data["NASDAQ 100"];
     const diffData = computeDiff(ndxData, spxData, startYear, currentYear);
 
     loader.remove();
@@ -837,13 +837,13 @@ async function main() {
     const wNdx = document.createElement("div");
     wNdx.id = "wrap-ndx";
     wNdx.className = "table-wrap";
-    wNdx.innerHTML = buildTable("NASDAQ Composite", "^IXIC", ndxData, startYear, currentYear, currentMonth, false);
+    wNdx.innerHTML = buildTable("NASDAQ 100", "^NDX", ndxData, startYear, currentYear, currentMonth, false);
     content.appendChild(wNdx);
 
     const wDiff = document.createElement("div");
     wDiff.id = "wrap-diff";
     wDiff.className = "table-wrap";
-    wDiff.innerHTML = buildTable("NASDAQ − S&P 500", "NDX−SPX", diffData, startYear, currentYear, currentMonth, true);
+    wDiff.innerHTML = buildTable("NASDAQ 100 − S&P 500", "NDX−SPX", diffData, startYear, currentYear, currentMonth, true);
     content.appendChild(wDiff);
 
     // Cumulative chart — lazy built on first click

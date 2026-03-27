@@ -1,5 +1,5 @@
 // Vercel Serverless Function — fetches Yahoo Finance monthly data
-// and computes calendar-month % returns for S&P 500 & NASDAQ
+// and computes calendar-month % returns for S&P 500 & NASDAQ 100
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
   const startYear = parseInt(req.query.start || "2015", 10);
   const symbols = {
     "S&P 500": "^GSPC",
-    NASDAQ: "^IXIC",
+    "NASDAQ 100": "^NDX",
   };
 
   // We need data from Dec of (startYear-1) to compute Jan return
