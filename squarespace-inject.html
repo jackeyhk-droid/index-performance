@@ -1,0 +1,54 @@
+<style>
+  /* ===== Full-page takeover: hide all Squarespace UI ===== */
+  header#header,
+  .header,
+  #header,
+  [data-section-theme],
+  footer#footer,
+  footer.sections,
+  .Footer,
+  #footer-sections,
+  .sqs-announcement-bar-dropzone,
+  .sqs-cookie-banner-v2,
+  #sidecarNav { 
+    display: none !important; 
+  }
+
+  body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+
+  .page-section,
+  .content-wrapper,
+  .content,
+  main,
+  article,
+  section {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Inject full-viewport iframe
+    var container = document.createElement('div');
+    container.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0E1117;';
+    
+    var iframe = document.createElement('iframe');
+    // ──────────────────────────────────────────────────────────
+    // REPLACE THIS URL with your actual Vercel deployment URL
+    // ──────────────────────────────────────────────────────────
+    iframe.src = 'https://index-performance.vercel.app/';
+    iframe.title = 'Index Seasonality Dashboard';
+    iframe.allow = 'clipboard-write';
+    iframe.style.cssText = 'width:100%;height:100%;border:none;';
+    
+    container.appendChild(iframe);
+    document.body.appendChild(container);
+  });
+</script>
