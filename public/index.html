@@ -23,14 +23,17 @@
     --text-muted:    #6E7681;
     --text-dim:      #484F58;
 
-    /* Refined cell colours — Emerald & Rose tones */
-    --green-strong:  #059669;
-    --green-mid:     #047857;
-    --green-subtle:  #064E3B;
-    --red-strong:    #E11D48;
-    --red-mid:       #BE123C;
-    --red-subtle:    #881337;
-    --neutral:       #374151;
+    /* Green: brightness scales with magnitude */
+    --green-strong:  #10B981; /* bright emerald — big moves ≥6% */
+    --green-mid:     #047857; /* standard green — 3%–6% */
+    --green-subtle:  #064E3B; /* dim green — 0.5%–3% */
+
+    /* Red: brightness scales with magnitude */
+    --red-strong:    #F43F5E; /* bright rose — big moves ≥6% */
+    --red-mid:       #BE123C; /* standard red — 3%–6% */
+    --red-subtle:    #4C0519; /* dim wine — 0.5%–3% */
+
+    --neutral:       #2D333B; /* near-background grey — flat ±0.5% */
 
     --accent-blue:   #58A6FF;
     --accent-dim:    rgba(88,166,255,0.12);
@@ -389,14 +392,14 @@
     font-weight: 700;
   }
 
-  /* ── Cell colouring — opaque fills + glow variable ── */
+  /* ── Cell colouring — brightness scales with magnitude ── */
   .cell-strong-green { background: var(--green-strong); color: #FFFFFF; --glow: var(--green-strong); }
   .cell-mid-green    { background: var(--green-mid);    color: #FFFFFF; --glow: var(--green-mid); }
-  .cell-subtle-green { background: var(--green-subtle); color: #C6D8CF; --glow: var(--green-subtle); }
+  .cell-subtle-green { background: var(--green-subtle); color: #8BBFA8; --glow: var(--green-subtle); }
   .cell-strong-red   { background: var(--red-strong);   color: #FFFFFF; --glow: var(--red-strong); }
   .cell-mid-red      { background: var(--red-mid);      color: #FFFFFF; --glow: var(--red-mid); }
-  .cell-subtle-red   { background: var(--red-subtle);   color: #D8C6CC; --glow: var(--red-subtle); }
-  .cell-neutral      { background: var(--neutral);      color: #B0B8C4; --glow: var(--neutral); }
+  .cell-subtle-red   { background: var(--red-subtle);   color: #B88A95; --glow: var(--red-subtle); }
+  .cell-neutral      { background: var(--neutral);      color: #7A828E; --glow: var(--neutral); }
   .cell-empty {
     background: repeating-linear-gradient(
       -45deg,
@@ -512,7 +515,7 @@
 
 <!-- ═══ Footer ══════════════════════════════════════ -->
 <footer class="footer">
-  <span>Data from 2015 to present &middot; Returns from adjusted monthly closes &middot; Flat zone: |return| &lt; 0.5%</span>
+  <span>Data from 2015 to present &middot; Returns from adjusted monthly closes &middot; Flat zone: |return| |return| &lt; 0.5%lt; 0.5% · Dim 0.5–3% · Standard 3–6% · Bright ≥6%</span>
   <span>Auto-refreshes hourly via Vercel Edge Cache</span>
 </footer>
 
@@ -524,17 +527,21 @@ const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov
 const NEUTRAL_THRESHOLD = 0.5;
 
 // ─── Colour logic ────────────────────────────────────
+//  |v| < 0.5  → neutral (dark grey, blends with bg)
+//  0.5–3%     → subtle  (dim red/green)
+//  3–6%       → mid     (standard red/green)
+//  ≥6%        → strong  (bright, pops out)
 function cellClass(v) {
   if (v == null) return "cell-empty";
   const abs = Math.abs(v);
   if (abs < NEUTRAL_THRESHOLD) return "cell-neutral";
   if (v > 0) {
-    if (abs >= 5) return "cell-strong-green";
-    if (abs >= 2) return "cell-mid-green";
+    if (abs >= 6) return "cell-strong-green";
+    if (abs >= 3) return "cell-mid-green";
     return "cell-subtle-green";
   }
-  if (abs >= 5) return "cell-strong-red";
-  if (abs >= 2) return "cell-mid-red";
+  if (abs >= 6) return "cell-strong-red";
+  if (abs >= 3) return "cell-mid-red";
   return "cell-subtle-red";
 }
 
@@ -642,7 +649,7 @@ function buildChart(container, spxData, ndxData, startYear, curYear, curMonth) {
       <div class="chart-subtitle">$100 invested Jan ${startYear} — S&P 500 vs NASDAQ 100 (monthly compounding)</div>
       <div class="chart-canvas-wrap"><canvas id="cumulativeChart"></canvas></div>
       <div class="chart-legend">
-        <span><span class="dot" style="background:#059669"></span>S&P 500</span>
+        <span><span class="dot" style="background:#10B981"></span>S&P 500</span>
         <span><span class="dot" style="background:#58A6FF"></span>NASDAQ 100</span>
       </div>
     </div>
@@ -656,8 +663,8 @@ function buildChart(container, spxData, ndxData, startYear, curYear, curMonth) {
 
   // Gradient fills
   const greenGrad = ctx.createLinearGradient(0, 0, 0, 480);
-  greenGrad.addColorStop(0, 'rgba(5, 150, 105, 0.25)');
-  greenGrad.addColorStop(1, 'rgba(5, 150, 105, 0.01)');
+  greenGrad.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
+  greenGrad.addColorStop(1, 'rgba(16, 185, 129, 0.01)');
 
   const blueGrad = ctx.createLinearGradient(0, 0, 0, 480);
   blueGrad.addColorStop(0, 'rgba(88, 166, 255, 0.20)');
@@ -673,12 +680,12 @@ function buildChart(container, spxData, ndxData, startYear, curYear, curMonth) {
         {
           label: 'S&P 500',
           data: spxSeries.values,
-          borderColor: '#059669',
+          borderColor: '#10B981',
           backgroundColor: greenGrad,
           borderWidth: 2,
           pointRadius: 0,
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: '#059669',
+          pointHoverBackgroundColor: '#10B981',
           pointHoverBorderColor: '#fff',
           pointHoverBorderWidth: 2,
           fill: true,
