@@ -172,8 +172,20 @@
     margin-right: 4px;
   }
 
+  /* ── Layout: full-bleed backgrounds, centered content ── */
+  .dashboard-header,
+  .controls,
+  .content,
+  .footer {
+    padding-left: max(28px, calc((100vw - 1384px) / 2));
+    padding-right: max(28px, calc((100vw - 1384px) / 2));
+  }
+
   /* ── Main content ──────────────────────────── */
-  .content { padding: 20px 28px 40px; }
+  .content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
 
   /* ── Table card ─────────────────────────────── */
   .table-wrap {
@@ -442,7 +454,10 @@
 
   /* ── Responsive ────────────────────────────── */
   @media (max-width: 768px) {
-    .dashboard-header, .controls, .content, .footer { padding-left: 14px; padding-right: 14px; }
+    .dashboard-header, .controls, .content, .footer {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
     .header-tag { font-size: 12px; }
     table { font-size: 11px; }
     tbody td { padding: 8px 4px; min-width: 46px; }
